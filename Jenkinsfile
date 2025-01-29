@@ -1,4 +1,6 @@
 def registry = 'https://balli1910.jfrog.io/'
+def imageName = 'balli1910.jfrog.io/valaxy-docker-local/ttrend'
+def version   = '2.1.2'
 pipeline{
     agent{
       node{
@@ -27,7 +29,7 @@ pipeline{
                               "files": [
                                 {
                                   "pattern": "jarstaging/(*)",
-                                  "target": "krishna-libs-release-local/{1}",
+                                  "target": "krishna-libs-release-local/{}",
                                   "flat": "false",
                                   "props" : "${properties}",
                                   "exclusions": [ "*.sha1", "*.md5"]
@@ -42,6 +44,28 @@ pipeline{
                 }
             }   
         }
+
+      stage(" Docker Build ") {
+          steps {
+            script {
+               echo '<--------------- Docker Build Started --------------->'
+               app = docker.build(imageName+":"+version)
+               echo '<--------------- Docker Build Ends --------------->'
+            }
+          }
+        }
+
+                stage (" Docker Publish "){
+            steps {
+                script {
+                   echo '<--------------- Docker Publish Started --------------->'  
+                    docker.withRegistry(registry, 'jfrog-cred'){
+                        app.push()
+                    }    
+                   echo '<--------------- Docker Publish Ended --------------->'  
+                }
+            }
+        }  
    
    }
 }
