@@ -27,7 +27,7 @@ pipeline{
                               "files": [
                                 {
                                   "pattern": "jarstaging/(*)",
-                                  "target": "krishna-libs-release-local/{*}",
+                                  "target": "krishna-libs-release-local/{1}",
                                   "flat": "false",
                                   "props" : "${properties}",
                                   "exclusions": [ "*.sha1", "*.md5"]
