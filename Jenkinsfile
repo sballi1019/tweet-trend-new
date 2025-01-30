@@ -66,6 +66,13 @@ pipeline{
                 }
             }
         }  
-   
+             stage ("deploy"){
+              steps{
+                script{
+                  echo "deploy application over EKS"
+                    sh './deploy.sh'
+                 }
+              }
+             }
    }
 }
